@@ -7,7 +7,7 @@
 //Möglichkeit eine Ansage nach x Minuten einmalig oder zyklisch bis Fensterschließung anzugeben
 //Dynamische erzeugung einer HTML Übersichtstabelle
 //WICHTIG!!!
-//Vorraussetzungen: Den Geräten müssen Räume zugewiesen sein, sowie die Funktion "Verschluss" für jeden entsprechenden Datenpunkt zugewiesen sein.
+//Vorraussetzungen: Den Geräten müssen Räume zugewiesen sein, sowie die Funktion "Licht" für jeden entsprechenden Datenpunkt zugewiesen sein.
 
 //Grundeinstellungen
 const logging = false; //Erweiterte Logs ausgeben?
