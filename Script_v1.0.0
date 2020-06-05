@@ -137,7 +137,7 @@ function CreateOverviewTable() { //  Erzeugt tabellarische Übersicht als HTML T
     //Tabellenüberschrift und Head
     let OverviewTable = "";
     if (!HeadlessTable) {
-        OverviewTable = "<table style='width:100%; border-collapse: collapse; border: 0px solid black;'><caption><div style='height: 20px; padding-top: 10px; padding-bottom: 5px; font-size:1.4em; font-weight: bold;'>Lichterstatus</div></caption>";
+        OverviewTable = "<table style='width:100%; border-collapse: collapse; border: 0px solid black;'><caption><div style='height: 20px; padding-top: 0px; padding-bottom: 5px; font-size:1.4em; font-weight: bold;'>Lichterstatus</div></caption>";
         OverviewTable = OverviewTable + "<thead><tr><th width='100%' style='text-align:center; height: 20px; padding-bottom: 5px;'>" + RoomsWithLightsOn + "</th></tr></thead><tbody></tbody></table>";
     };
     //Tabelle der Raumdetails
