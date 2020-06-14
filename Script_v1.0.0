@@ -205,7 +205,7 @@ function CheckLight(x) { //Für einzelnes Licht. Via Trigger angesteuert.
         LightOnCount++;
         RoomLightsOnCount[TempRoomIndex]++;
         if (logging) log("RoomLightsOnCount für " + TempRoom + "=" + RoomLightsOnCount[TempRoomIndex]);
-        setState(praefix + "AlleLichterAus", false);
+        setState(praefix + "ALLLightsOff", false);
         setState(praefix + TempRoom + ".IsOn", true);
         setState(praefix + "LightsOn", LightOnCount);
         setState(praefix + TempRoom + ".RoomLightsOnCount", RoomLightsOnCount[TempRoomIndex]);
