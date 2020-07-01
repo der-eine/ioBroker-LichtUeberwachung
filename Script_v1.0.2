@@ -1,4 +1,4 @@
-//der-eine V1.0.0 vom 05.06.2020
+//der-eine 05.06.2020
 //Ursprüngliches Skript: https://github.com/Pittini/iobroker-Fensterauswertung
 //Das folgende Skript wurde zum zählen von eingeschaltenen Lichtern umgeschrieben.
 //
@@ -7,7 +7,7 @@
 //Möglichkeit eine Ansage nach x Minuten einmalig oder zyklisch bis Fensterschließung anzugeben
 //Dynamische erzeugung einer HTML Übersichtstabelle
 //WICHTIG!!!
-//Vorraussetzungen: Den Geräten müssen Räume zugewiesen sein, sowie die Funktion "Licht" für jeden entsprechenden Datenpunkt zugewiesen sein.
+//Vorraussetzungen: Den Geräten müssen Räume zugewiesen sein, sowie die Funktion "Verschluss" für jeden entsprechenden Datenpunkt zugewiesen sein.
 
 //Grundeinstellungen
 const logging = false; //Erweiterte Logs ausgeben?
@@ -68,7 +68,7 @@ for (let x in Funktionen) {        // loop ueber alle Functions
                 //Datenpunkte pro Raum vorbereiten
                 States[DpCount] = { id: praefix + room + ".RoomLightsOnCount", initial: 0, forceCreation: false, common: { read: true, write: true, name: "Anzahl der eingeschaltenen Lichter im Raum", type: "number", def: 0 } };
                 DpCount++;
-                States[DpCount] = { id: praefix + room + ".IsOn", initial: false, forceCreation: false, common: { read: true, write: true, name: "Licht eingeschalten?", type: "boolean", role: "state", def: false } }; //
+                States[DpCount] = { id: praefix + room + ".IsOn", initial: false, forceCreation: false, common: { read: true, write: true, name: "Licht eingeschaltet?", type: "boolean", role: "state", def: false } }; //
                 DpCount++;
                 //log(Funktion + ': ' + room);
                 if (RoomList.indexOf(room) == -1) { //Raumliste ohne Raumduplikate erzeugen
@@ -85,7 +85,7 @@ for (let x in Funktionen) {        // loop ueber alle Functions
 
 //Struktur anlegen in js.0 um Sollwert und Summenergebniss zu speichern
 //Generische Datenpunkte vorbereiten 
-States[DpCount] = { id: praefix + "AlleLichterAus", initial: true, forceCreation: false, common: { read: true, write: true, name: "Licht aus?", type: "boolean", role: "state", def: true } }; //
+States[DpCount] = { id: praefix + "AllLightsOff", initial: true, forceCreation: false, common: { read: true, write: true, name: "Licht aus?", type: "boolean", role: "state", def: true } }; //
 DpCount++;
 States[DpCount] = { id: praefix + "LightsOn", initial: 0, forceCreation: false, common: { read: true, write: true, name: "Anzahl der eingeschaltenen Lichter", type: "number", def: 0 } };
 DpCount++;
@@ -150,13 +150,13 @@ function CreateOverviewTable() { //  Erzeugt tabellarische Übersicht als HTML T
             RoomStateTimeStamp[x] = formatDate(getDateObject(getState(praefix + RoomList[x] + ".IsOn").lc), TableDateFormat);
             OverviewTable = OverviewTable + "<tr><td style='border: 1px solid black; background-color:" + LightsOnColor + ";'><img height=40px src='" + LightsOnImg + "'></td>"
             OverviewTable = OverviewTable + "<td style='border: 1px solid black; padding-left: 10px; padding-right: 10px; font-size:1.1em; font-weight: bold; text-align:center;background-color:" + LightsOnColor + ";'>" + RoomLightsOnCount[x] + "</td>"
-            OverviewTable = OverviewTable + "<td style='border: 1px solid black; padding-left: 10px; padding-right: 10px; font-size:1.1em; font-weight: bold; background-color:" + LightsOnColor + ";'>" + RoomList[x] + "<br><div style='font-size:0.8em; font-weight:bold;'>eingeschalten: " + RoomStateTimeStamp[x] + "</div></td></tr>"
+            OverviewTable = OverviewTable + "<td style='border: 1px solid black; padding-left: 10px; padding-right: 10px; font-size:1.1em; font-weight: bold; background-color:" + LightsOnColor + ";'>" + RoomList[x] + "<br><div style='font-size:0.8em; font-weight:bold;'>eingeschaltet: " + RoomStateTimeStamp[x] + "</div></td></tr>"
         }
         else { // Ausgeschaltene Räume
             RoomStateTimeStamp[x] = formatDate(getDateObject(getState(praefix + RoomList[x] + ".IsOn").lc), TableDateFormat);
             OverviewTable = OverviewTable + "<tr><td style='border: 1px solid black; background-color:" + LightsOffColor + ";'><img height=40px src='" + LightOffImg + "'></td>"
             OverviewTable = OverviewTable + "<td style='border: 1px solid black; padding-left: 10px; padding-right: 10px; font-size:1.1em; font-weight: bold; text-align:center; background-color:" + LightsOffColor + ";'>" + RoomLightsOnCount[x] + "</td>"
-            OverviewTable = OverviewTable + "<td style='border: 1px solid black; padding-left: 10px; padding-right: 10px; font-size:1.1em; font-weight: bold; background-color:" + LightsOffColor + ";'>" + RoomList[x] + "<br><div style='font-size:0.7em; font-weight:normal;'>ausgeschalten: " + RoomStateTimeStamp[x] + "</div></td></tr>"
+            OverviewTable = OverviewTable + "<td style='border: 1px solid black; padding-left: 10px; padding-right: 10px; font-size:1.1em; font-weight: bold; background-color:" + LightsOffColor + ";'>" + RoomList[x] + "<br><div style='font-size:0.7em; font-weight:normal;'>ausgeschaltet: " + RoomStateTimeStamp[x] + "</div></td></tr>"
 
         };
     };
@@ -170,10 +170,10 @@ function CreateRoomsWithLightsOnList() { //Erzeugt Textliste mit Räumen welche 
     for (let x = 0; x < RoomList.length; x++) { //Alle Räume durchgehen
         if (RoomLightsOnCount[x] > 0) { // Nur Räume mit eingeschaltenen Lichtern berücksichtigen
             if (RoomLightsOnCount[x] == 1) { //Wenn 1 Licht ein, Singular Schreibweise
-                RoomsWithLightsOn = RoomsWithLightsOn + RoomList[x] + " " + RoomLightsOnCount[x] + " eingeschaltenes Licht" + LightsOnListSeparator;
+                RoomsWithLightsOn = RoomsWithLightsOn + RoomList[x] + " " + RoomLightsOnCount[x] + " eingeschaltete Lichter" + LightsOnListSeparator;
             }
             else { //ansonsten Plural Schreibweise
-                RoomsWithLightsOn = RoomsWithLightsOn + RoomList[x] + " " + RoomLightsOnCount[x] + " eingeschaltene Lichter" + LightsOnListSeparator;
+                RoomsWithLightsOn = RoomsWithLightsOn + RoomList[x] + " " + RoomLightsOnCount[x] + " eingeschaltete Lichter" + LightsOnListSeparator;
             };
         };
     };
@@ -211,8 +211,8 @@ function CheckLight(x) { //Für einzelnes Licht. Via Trigger angesteuert.
         setState(praefix + TempRoom + ".RoomLightsOnCount", RoomLightsOnCount[TempRoomIndex]);
 
         if (logging) log(TempRoom + " Licht eingeschalten");
-        if (AlsoMsgLightOnOff) Meldung(TempRoom + " Licht eingeschalten!");
-        if (UseEventLog == true) WriteEventLog(TempRoom + " Licht eingeschalten!");
+        if (AlsoMsgLightOnOff) Meldung(TempRoom + " Licht eingeschaltet!");
+        if (UseEventLog == true) WriteEventLog(TempRoom + " Licht eingeschaltet!");
         if (RoomLightsOnCount[TempRoomIndex] == 1) {
             Laufzeit[TempRoomIndex] = 0;
             if (InfoMsgAktiv == true) {
@@ -242,8 +242,8 @@ function CheckLight(x) { //Für einzelnes Licht. Via Trigger angesteuert.
         setState(praefix + TempRoom + ".RoomLightsOnCount", RoomLightsOnCount[TempRoomIndex]);
 
         log(TempRoom + " Licht ausgeschalten.");
-        if (AlsoMsgLightOnOff) Meldung(TempRoom + " Licht ausgeschalten!");
-        if (UseEventLog == true) WriteEventLog(TempRoom + " Licht ausgeschalten!");
+        if (AlsoMsgLightOnOff) Meldung(TempRoom + " Licht ausgeschaltet!");
+        if (UseEventLog == true) WriteEventLog(TempRoom + " Licht ausgeschaltet!");
         if (RoomLightsOnCount[TempRoomIndex] == 0) {
             setState(praefix + TempRoom + ".IsOn", false);
 
@@ -258,7 +258,7 @@ function CheckLight(x) { //Für einzelnes Licht. Via Trigger angesteuert.
         };
 
         if (LightOnCount == 0) { //Wenn kein Licht mehr eingeschalten
-            setState(praefix + "AlleLichterAus", true);
+            setState(praefix + "AllLightsOff", true);
             setState(praefix + TempRoom + ".IsOn", false);
             log("Alle Lichter ausgeschalten.");
         };
@@ -277,7 +277,7 @@ function CheckAllLights() { //Prüft bei Programmstart alle Lichter
             RoomLightsOnCount[TempRoomIndex] = RoomLightsOnCount[TempRoomIndex] + 1;
             if (logging) log("Temproom= " + TempRoom + " TempRoomIndex= " + RoomList.indexOf(TempRoom) + "  RoomLightsOnCount= " + RoomLightsOnCount[TempRoomIndex]);
 
-            setState(praefix + "AlleLichterAus", false);
+            setState(praefix + "AllLightsOff", false);
             setState(praefix + "LightsOn", LightOnCount);
 
             setState(praefix + TempRoom + ".IsOn", true);
@@ -310,7 +310,7 @@ function CheckAllLights() { //Prüft bei Programmstart alle Lichter
         };
     };
     if (LightOnCount == 0) {
-        setState(praefix + "AlleLichterAus", true);
+        setState(praefix + "AllLightsOff", true);
         setState(praefix + "LightsOn", LightOnCount);
 
         log("Alle Lichter ausgeschalten.");
