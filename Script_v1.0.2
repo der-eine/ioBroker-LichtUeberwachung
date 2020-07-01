@@ -170,10 +170,10 @@ function CreateRoomsWithLightsOnList() { //Erzeugt Textliste mit Räumen welche 
     for (let x = 0; x < RoomList.length; x++) { //Alle Räume durchgehen
         if (RoomLightsOnCount[x] > 0) { // Nur Räume mit eingeschaltenen Lichtern berücksichtigen
             if (RoomLightsOnCount[x] == 1) { //Wenn 1 Licht ein, Singular Schreibweise
-                RoomsWithLightsOn = RoomsWithLightsOn + RoomList[x] + " " + RoomLightsOnCount[x] + " eingeschaltete Lichter" + LightsOnListSeparator;
+                RoomsWithLightsOn = RoomsWithLightsOn + RoomList[x] + " " + RoomLightsOnCount[x] + " eingeschaltenes Licht" + LightsOnListSeparator;
             }
             else { //ansonsten Plural Schreibweise
-                RoomsWithLightsOn = RoomsWithLightsOn + RoomList[x] + " " + RoomLightsOnCount[x] + " eingeschaltete Lichter" + LightsOnListSeparator;
+                RoomsWithLightsOn = RoomsWithLightsOn + RoomList[x] + " " + RoomLightsOnCount[x] + " eingeschaltene Lichter" + LightsOnListSeparator;
             };
         };
     };
